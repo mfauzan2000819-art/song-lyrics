@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sailor Song</title>
+<style>
+  body {
+    background: black;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 50px;
+  }
+  button {
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    background: #1db954;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-bottom: 30px;
+  }
+  button:hover {
+    background: #17a74a;
+  }
+  .line {
+    opacity: 0;
+    margin: 10px 0;
+  }
+  @keyframes fadeIn { to { opacity: 1; } }
+</style>
+</head>
+<body>
+  <h1>Sailor Song</h1>
+
+  <button id="playBtn">▶ Play Song</button>
+  <h2 id="countdown">3</h2>
+
+  <audio id="song" src="sailor.song.mp3"></audio>
+
+  <div id="lyrics">
+    <div class="line" data-delay="0">I saw her in the rightest way</div>
+    <div class="line" data-delay="5700">Looking like Anne Hathaway</div>
+    <div class="line" data-delay="11000">Laughing while she hit her pen</div>
+    <div class="line" data-delay="15000">And coughed, and coughed</div>
+    <div class="line" data-delay="19900">And then, she came up to my knees</div>
+    <div class="line" data-delay="26000">Begging, "Baby, would you please?"</div>
+    <div class="line" data-delay="31000">Do the things you said you'd do to me, to me?"</div>
+    <div class="line" data-delay="39700">Oh, won't you kiss me on the mouth and love me like a sailor?</div>
+    <div class="line" data-delay="45000">And when you get a taste, can you tell me what's my flavor?</div>
+    <div class="line" data-delay="50000">I don't believe in God, but I believe that you're my savior</div>
+    <div class="line" data-delay="56000">My mom says that she's worried, but I'm covered in His favor</div>
+    <div class="line" data-delay="60300">And when we're getting dirty, I forget all that is wrong</div>
+    <div class="line" data-delay="65800">I sleep so I can see you 'cause I hate to wait so long</div>
+    <div class="line" data-delay="70300">I sleep so I can see you and I hate to wait so long</div>
+ </div>
+
+  <div id="credits" style="display:none;">
+    developer: Muhammad Fauzan<br>
+    voice actor: [Gigi Perez]<br>
+    Music: [Sailor song]
+</div>
+
+<script>
+const audio = document.getElementById("song");
+const btn = document.getElementById("playBtn");
+const countdownEl = document.getElementById("countdown");
+const lyrics = document.querySelectorAll(".line");
+
+let countdown = 3;
+
+function startCountdown() {
+  countdownEl.textContent = countdown;
+  if(countdown > 0){
+    countdown--;
+    setTimeout(startCountdown, 1000);
+  } else {
+    countdownEl.style.display = "none";
+    audio.play();
+    showLyrics();
+  }
+}
+
+function showLyrics(){
+  lyrics.forEach(line => {
+    const delay = Number(line.getAttribute("data-delay")); // ✅ ganti parseInt -> Number supaya desimal terbaca
+    setTimeout(() => {
+      line.style.animation = "fadeIn 1s forwards";
+    }, delay);
+  });
+
+const totalLyricsTime = 70300 + 1000 + 5000; // delay terakhir + fadeIn + 5 detik tampil
+setTimeout(() => {
+  lyrics.forEach(line => line.style.display = "none");
+  document.getElementById("credits").style.display = "block";
+}, totalLyricsTime);
+
+}
+
+
+btn.addEventListener("click", () => {
+  if(audio.paused){
+    audio.play();
+    btn.textContent = "⏸ Pause Song";
+    if(countdown > 0){
+      startCountdown();
+    }
+  } else {
+    audio.pause();
+    btn.textContent = "▶ Play Song";
+  }
+});
+
+</script>
+</body>
+</html>
